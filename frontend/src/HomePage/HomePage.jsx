@@ -107,7 +107,7 @@ const HomePage = () => {
     console.log("Searching for:", searchQuery);
   };
 
-  // Filter wallpapers based on search term
+  
   const filteredWallpapers = wallpapers.filter((wallpaper) =>
     wallpaper.photoName.toLowerCase().includes(searchTerm.toLowerCase())
   );
