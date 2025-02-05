@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaCloudDownloadAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  FaCloudDownloadAlt,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import Loading from "../Loading/Loading";
+import Navbar from "../Navbar/Navbar";
 
 const HomePage = () => {
   const [wallpapers, setWallpapers] = useState([]);
@@ -10,13 +15,19 @@ const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [downloadModal, setDownloadModal] = useState({ visible: false, fileName: "" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [downloadModal, setDownloadModal] = useState({
+    visible: false,
+    fileName: "",
+  });
   const limit = 30;
 
   const fetchWallpapers = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:7000/photo/getAll?page=${page}&limit=${limit}`);
+      const response = await axios.get(
+        `http://localhost:7000/photo/getAll?page=${page}&limit=${limit}`
+      );
       const { wallpapers: newWallpapers, pagination } = response.data;
 
       setWallpapers((prevWallpapers) => [...prevWallpapers, ...newWallpapers]);
@@ -90,17 +101,29 @@ const HomePage = () => {
     }
   };
 
+  // Update search term and filter wallpapers based on search
+  const handleSearch = (searchQuery) => {
+    setSearchTerm(searchQuery);
+    console.log("Searching for:", searchQuery);
+  };
+
+  // Filter wallpapers based on search term
+  const filteredWallpapers = wallpapers.filter((wallpaper) =>
+    wallpaper.photoName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="container mx-auto py-8 px-4 bg-gray-50">
+    <div className="container mx-auto px-4 bg-gray-50">
       {loading && currentPage === 1 ? (
         <div className="flex justify-center items-center min-h-screen">
           <Loading />
         </div>
       ) : (
         <>
+          <Navbar onSearch={handleSearch} />
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {wallpapers.length > 0 ? (
-              wallpapers.map((wallpaper, index) => (
+            {filteredWallpapers.length > 0 ? (
+              filteredWallpapers.map((wallpaper, index) => (
                 <div
                   key={wallpaper._id}
                   className="relative group shadow-lg rounded-lg overflow-hidden bg-white transition-all duration-300 ease-in-out transform hover:shadow-xl cursor-pointer"
@@ -113,7 +136,9 @@ const HomePage = () => {
                   />
                   <div className="absolute inset-0 bottom-0 bg-black bg-opacity-60 text-white flex items-end justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div>
-                      <h2 className="font-bold text-lg">{wallpaper.photoName}</h2>
+                      <h2 className="font-bold text-lg">
+                        {wallpaper.photoName}
+                      </h2>
                       <p className="text-sm mt-1">{wallpaper.email}</p>
                       <p className="text-sm mt-1">{wallpaper.userName}</p>
                     </div>
@@ -131,7 +156,9 @@ const HomePage = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center text-gray-600 text-lg">No wallpapers available.</p>
+              <p className="text-center text-gray-600 text-lg">
+                No wallpapers available.
+              </p>
             )}
           </div>
 
@@ -149,7 +176,6 @@ const HomePage = () => {
       )}
 
       {/* Modal with Image Slider */}
-
       {modalVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 px-4 sm:px-6">
           <div className="relative bg-white rounded-lg shadow-lg p-4 sm:p-6 max-w-sm sm:max-w-md md:max-w-lg w-full">
@@ -180,9 +206,12 @@ const HomePage = () => {
               </button>
             </div>
             <div className="mt-4 text-center">
-              <p className="text-sm sm:text-lg font-semibold">{wallpapers[currentIndex].photoName}</p>
+              <p className="text-sm sm:text-lg font-semibold">
+                {wallpapers[currentIndex].photoName}
+              </p>
               <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                Uploaded by: {wallpapers[currentIndex].userName} | {wallpapers[currentIndex].email}
+                Uploaded by: {wallpapers[currentIndex].userName} |{" "}
+                {wallpapers[currentIndex].email}
               </p>
               <button
                 className="mt-4 px-4 py-2 sm:px-6 sm:py-2 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-md hover:from-green-600 hover:to-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-300"
@@ -214,7 +243,6 @@ const HomePage = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
