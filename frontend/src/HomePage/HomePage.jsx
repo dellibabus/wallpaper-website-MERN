@@ -113,7 +113,7 @@ const HomePage = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 bg-gray-50">
+    <div className="container mx-auto px-4 bg-gray-50 mt-24">
       {loading && currentPage === 1 ? (
         <div className="flex justify-center items-center min-h-screen">
           <Loading />

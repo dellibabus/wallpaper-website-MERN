@@ -56,7 +56,7 @@ const WallpaperUpload = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-8">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-8 mt-20">
       <div className="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl w-full max-w-lg">
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-500">
           Upload Wallpaper
