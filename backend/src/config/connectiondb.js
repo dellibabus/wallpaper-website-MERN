@@ -1,4 +1,4 @@
-// src/config/connectiondb.js
+
 const mongoose = require("mongoose");
 
 const connect = () => {
