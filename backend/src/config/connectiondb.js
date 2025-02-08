@@ -1,18 +1,15 @@
-
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const connect = () => {
+function connect() {
   mongoose
-    .connect(
-      "mongodb+srv://dbdellibabu:6rE9a2BBF2kujFoM@wallpaper-website.jvwnj.mongodb.net/server001?retryWrites=true&w=majority&appName=wallpaper-website",
-      {}
-    )
+    .connect(process.env.MONGO_URI)
     .then(() => {
-      console.log("Database connected successfully....");
+      console.log("MongoDB Connected......");
     })
     .catch((err) => {
-      console.log("Database connection error:", err);
+      console.log(`Connection Error ${err}`);
     });
-};
+}
 
 module.exports = { connect };
