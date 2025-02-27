@@ -15,22 +15,20 @@ const Navbar = ({ onSearch }) => {
 
   const isActive = (path) =>
     location.pathname === path
-      ? "text-blue-400 border-b-2 border-blue-400"
-      : "hover:text-blue-400 hover:border-b-2 hover:border-blue-400";
+      ? "text-blue-400 border-b-2 border: py-2 border-blue-400"
+      : "hover:text-blue-400 hover:border-b-2 hover:border-blue-400 hover:border: py-2";
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50">
+    <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
       <div className="container mx-auto flex items-center justify-between py-4 px-4 md:px-8">
         {/* Logo */}
-        <Link to={"/"}>
-          <div className="flex items-center gap-3 cursor-pointer">
-            <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
-            <h1 className="text-2xl font-bold tracking-wide">Autumn</h1>
-          </div>
+        <Link to="/" className="flex items-center gap-3">
+          <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
+          <h1 className="text-2xl font-bold tracking-wide">Autumn</h1>
         </Link>
 
         {/* Search Bar */}
-        <div className="hidden sm:flex items-center w-[40%]">
+        <div className="hidden sm:flex items-center w-[40%] relative">
           <input
             type="text"
             className="w-full p-2 rounded-md text-black focus:ring focus:ring-blue-400"
@@ -40,30 +38,30 @@ const Navbar = ({ onSearch }) => {
           />
           <button
             onClick={() => onSearch && onSearch(searchTerm)}
-            className="ml-2 p-2 bg-blue-500 text-white flex items-center gap-2 rounded-md hover:bg-blue-600 transition duration-200"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200"
             aria-label="Search"
           >
-            <FaSearch /> Search
+            <FaSearch />
           </button>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8 font-medium">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.path}
-              href={item.path}
+              to={item.path}
               className={`transition duration-200 ${isActive(item.path)}`}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
-          <button
-            onClick={() => (window.location.href = "/admin/login")}
+          <Link
+            to="/admin/login"
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
           >
             Admin Login
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -78,9 +76,8 @@ const Navbar = ({ onSearch }) => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white shadow-lg transform ${
-          toggle ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white shadow-lg transform ${toggle ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out`}
       >
         <button
           onClick={() => setToggle(false)}
@@ -92,27 +89,23 @@ const Navbar = ({ onSearch }) => {
         <ul className="flex flex-col mt-16 space-y-6 px-6 text-lg">
           {navItems.map((item) => (
             <li key={item.path}>
-              <a
-                href={item.path}
-                className={`block py-2 transition duration-200 ${isActive(
-                  item.path
-                )}`}
+              <Link
+                to={item.path}
+                className={`block py-2 transition duration-200 ${isActive(item.path)}`}
                 onClick={() => setToggle(false)}
               >
                 {item.name}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
-            <button
-              onClick={() => {
-                setToggle(false);
-                window.location.href = "/admin/login";
-              }}
-              className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+            <Link
+              to="/admin/login"
+              className="block w-full bg-blue-500 text-white px-4 py-2 rounded-md text-center hover:bg-blue-600 transition duration-200"
+              onClick={() => setToggle(false)}
             >
               Admin Login
-            </button>
+            </Link>
           </li>
         </ul>
       </div>
